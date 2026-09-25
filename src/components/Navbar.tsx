@@ -80,7 +80,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Desktop KPI Mini Badges */}
-          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 text-xs">
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 text-xs whitespace-nowrap shrink-0">
             <div className="bg-slate-800/80 px-3 py-1.5 rounded-md border border-slate-700/60">
               <span className="text-slate-400 block text-[10px] leading-tight">総在籍生徒数</span>
               <span className="text-amber-400 font-bold text-sm">{totalStudents.toLocaleString()}</span>
@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span className="text-slate-500 mx-0.5">:</span>
                     <span className="text-sky-300 font-medium">男{maleTotal}</span>
                     {femaleTotal + maleTotal !== totalStudents && (
-                      <span className="text-slate-500 ml-1">({femaleTotal + maleTotal}名中)</span>
+                      <span className="text-slate-500 ml-1 hidden 2xl:inline">({femaleTotal + maleTotal}名中)</span>
                     )}
                   </div>
                 </>
@@ -127,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Action Buttons & Mobile Hamburger */}
-          <div className="flex items-center space-x-1.5 sm:space-x-2">
+          <div className="flex items-center space-x-1.5 sm:space-x-2 whitespace-nowrap shrink-0">
             {isCustomData && (
               <button
                 id="reset-data-btn"
@@ -136,8 +136,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="初期の2026年度在籍データにリセット"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden md:inline">初期データに戻す</span>
-                <span className="md:hidden">リセット</span>
+                <span className="hidden 2xl:inline">初期データに戻す</span>
+                <span className="2xl:hidden">リセット</span>
               </button>
             )}
 
