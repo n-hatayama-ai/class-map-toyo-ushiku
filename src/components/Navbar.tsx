@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span className="text-slate-500 mx-0.5">:</span>
                     <span className="text-sky-300 font-medium">男{maleTotal}</span>
                     {femaleTotal + maleTotal !== totalStudents && (
-                      <span className="text-slate-500 ml-1 hidden 2xl:inline">({femaleTotal + maleTotal}名中)</span>
+                      <span className="text-slate-500 ml-1">({femaleTotal + maleTotal}名中)</span>
                     )}
                   </div>
                 </>
