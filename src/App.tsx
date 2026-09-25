@@ -31,41 +31,27 @@ const normalizeJpSearch = (str: string) => {
     .replace(/龍/g, '竜');
 };
 
-// Persists uploaded data in the browser so a page reload doesn't silently
-// revert to the sample dataset (this app has no backend to store uploads).
-const CUSTOM_DATA_STORAGE_KEY = 'juniorHighMap.customData.v1';
-
-interface StoredCustomData {
-  schools: JuniorHighSchool[];
-  students: Student[];
+// Uploaded data is shown for the current page session only, so every visit
+// opens on the published dataset. Earlier versions persisted uploads here;
+// clear any leftover copy (it also held student-level records in plaintext).
+try {
+  localStorage.removeItem('juniorHighMap.customData.v1');
+} catch {
+  // ignore
 }
 
-const loadStoredCustomData = (): StoredCustomData | null => {
-  try {
-    const raw = localStorage.getItem(CUSTOM_DATA_STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed?.schools) || !Array.isArray(parsed?.students)) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
-};
-
 export default function App({ initialData }: { initialData: Dataset }) {
-  const storedCustomData = useState(() => loadStoredCustomData())[0];
-
   const [schools, setSchools] = useState<JuniorHighSchool[]>(
-    (storedCustomData?.schools as JuniorHighSchool[]) || initialData.schools
+    initialData.schools
   );
   const [students, setStudents] = useState<Student[]>(
-    (storedCustomData?.students as Student[]) || initialData.students
+    initialData.students
   );
   const [highSchool] = useState<HighSchoolInfo>(
     highSchoolInfo as HighSchoolInfo
   );
 
-  const [isCustomData, setIsCustomData] = useState(!!storedCustomData);
+  const [isCustomData, setIsCustomData] = useState(false);
   const [selectedSchool, setSelectedSchool] = useState<JuniorHighSchool | null>(null);
   const [highlightedSchoolId, setHighlightedSchoolId] = useState<string | null>(null);
   // Bumped on every pinpoint request, even for the school already
@@ -223,15 +209,6 @@ export default function App({ initialData }: { initialData: Dataset }) {
     setSchools(data.schools);
     setStudents(data.students);
     setIsCustomData(true);
-    try {
-      localStorage.setItem(
-        CUSTOM_DATA_STORAGE_KEY,
-        JSON.stringify({ schools: data.schools, students: data.students })
-      );
-    } catch {
-      // localStorage may be unavailable (e.g. private browsing / quota) — data
-      // still displays for this session, it just won't survive a reload.
-    }
     setSelectedSchool(null);
     setHighlightedSchoolId(null);
     setFilter(DEFAULT_FILTER);
@@ -242,11 +219,6 @@ export default function App({ initialData }: { initialData: Dataset }) {
     setSchools(initialData.schools);
     setStudents(initialData.students);
     setIsCustomData(false);
-    try {
-      localStorage.removeItem(CUSTOM_DATA_STORAGE_KEY);
-    } catch {
-      // ignore
-    }
     setSelectedSchool(null);
     setHighlightedSchoolId(null);
     setFilter(DEFAULT_FILTER);
