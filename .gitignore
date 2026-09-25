@@ -1,0 +1,17 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Raw student exports (contain student IDs) must never be committed
+scripts/grade1_decoded.csv
+*.csv
+__pycache__/
+
+# Plaintext dataset — only the encrypted public/data.enc.json is published
+src/data/schoolsData.json
+src/data/studentsData.json
